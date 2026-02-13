@@ -31,8 +31,11 @@ Friday's "Minority Report" interface uses your webcam to detect hand gestures:
 
 Gesture	Action
 🤏 Pinch	Confirm action / click
+
 ✋ Open Palm	Release the window
+
 ✊ Close Fist	"Select" and grab a UI window to drag it
+
 Tip: Enable the video feed window to see the hand tracking overlay.
 
 🏗️ Architecture Overview
@@ -59,7 +62,7 @@ Step 4: Get the Code
 
 Open your terminal (or Command Prompt on Windows).
 Type this command and hit Enter:
-git clone https://github.com/nazirlouis/ada_v2.git
+git clone https://github.com/FridayIndustries/Friday
 This creates a folder named ada_v2.
 Step 5: Open in VS Code
 
