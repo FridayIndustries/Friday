@@ -75,9 +75,7 @@ const KasaWindow = ({
         <div
             id="kasa"
             onMouseDown={onMouseDown}
-            className={`absolute flex flex-col gap-2 p-4 rounded-xl backdrop-blur-md bg-black/60 border border-cyan-500/30 transition-all duration-200 select-none
-                ${activeDragElement === 'kasa' ? 'ring-2 ring-green-500 shadow-[0_0_30px_rgba(34,197,94,0.3)]' : 'shadow-[0_0_20px_rgba(6,182,212,0.1)]'}
-            `}
+            className={`absolute flex flex-col gap-2 p-4 rounded-xl friday-panel transition-all duration-200 select-none ${activeDragElement === 'kasa' ? 'ring-2 ring-orange-400 shadow-[0_0_30px_rgba(255,138,0,0.18)]' : 'shadow-[0_0_20px_rgba(255,138,0,0.12)]'}`}
             style={{
                 left: position.x,
                 top: position.y,
@@ -90,8 +88,8 @@ const KasaWindow = ({
             {/* Header */}
             <div data-drag-handle className="flex items-center justify-between pb-2 border-b border-white/10 mb-2 cursor-grab active:cursor-grabbing">
                 <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${devices.length > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
-                    <h3 className="font-bold text-cyan-400 tracking-wider text-sm">SMART CONTROL</h3>
+                        <div className={`w-2 h-2 rounded-full ${devices.length > 0 ? 'bg-green-500 animate-pulse' : 'bg-gray-500'}`} />
+                        <h3 className="font-bold neon-accent tracking-wider text-sm">SMART CONTROL</h3>
                 </div>
                 <button
                     onClick={onClose}
@@ -107,10 +105,7 @@ const KasaWindow = ({
                 {devices.length === 0 && !isThinking && (
                     <div className="flex flex-col items-center justify-center p-8 text-center opacity-50">
                         <p className="text-xs mb-4">No devices found. Ensure they are on the same network.</p>
-                        <button
-                            onClick={handleDiscover}
-                            className="flex items-center gap-2 px-4 py-2 bg-cyan-900/30 border border-cyan-500/30 rounded-lg hover:bg-cyan-500/20 hover:border-cyan-500 transition-all text-xs font-mono text-cyan-300"
-                        >
+                        <button onClick={handleDiscover} className="flex items-center gap-2 px-4 py-2 bg-black/10 border border-orange-900/8 rounded-lg hover:bg-black/20 transition-all text-xs font-mono text-orange-300">
                             <RefreshCw size={14} /> DISCOVER LIGHTS
                         </button>
                     </div>
@@ -124,7 +119,7 @@ const KasaWindow = ({
                 )}
 
                 {devices.map((dev) => (
-                    <div key={dev.ip} className="mb-3 p-3 bg-white/5 rounded-lg border border-white/10 hover:border-cyan-500/30 transition-all">
+                    <div key={dev.ip} className="mb-3 p-3 bg-black/5 rounded-lg border border-orange-900/8 hover:border-orange-400/30 transition-all">
                         <div className="flex items-center justify-between mb-2">
                             <div className="flex flex-col">
                                 <span className="font-bold text-sm text-white">{dev.alias}</span>
@@ -135,7 +130,7 @@ const KasaWindow = ({
                                 disabled={loadingDevices[dev.ip]}
                                 className={`p-2 rounded-full transition-all ${dev.is_on
                                     ? 'bg-green-500/20 text-green-400 shadow-[0_0_10px_rgba(34,197,94,0.3)]'
-                                    : 'bg-white/5 text-gray-500 hover:text-white'}
+                                    : 'bg-black/10 text-gray-300 hover:text-white'}
                                     ${loadingDevices[dev.ip] ? 'opacity-50 cursor-not-allowed' : ''}
                                 `}
                             >
@@ -185,12 +180,8 @@ const KasaWindow = ({
             </div>
             {/* Bottom Discover (if devices exist) */}
             {devices.length > 0 && (
-                <div className="pt-2 border-t border-white/10 mt-2 flex justify-end">
-                    <button
-                        onClick={handleDiscover}
-                        className="p-1 text-white/30 hover:text-cyan-400 transition-colors"
-                        title="Rescan"
-                    >
+                <div className="pt-2 border-t border-orange-900/8 mt-2 flex justify-end">
+                    <button onClick={handleDiscover} className="p-1 text-orange-300/70 hover:text-orange-300 transition-colors" title="Rescan">
                         <RefreshCw size={14} />
                     </button>
                 </div>

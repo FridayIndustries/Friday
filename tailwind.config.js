@@ -11,9 +11,10 @@ module.exports = {
             },
             colors: {
                 cyan: {
-                    400: '#22d3ee',
-                    500: '#06b6d4',
-                    900: '#164e63',
+                    // Remapped to orange tones so existing cyan-* classes become orange
+                    400: '#FF8A00', // bright orange
+                    500: '#FF6A00', // primary orange
+                    900: '#3a1200', // dark brown/orange for accents
                 }
             }
         },

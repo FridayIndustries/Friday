@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, RefreshCw, Printer, Thermometer, Clock, FileText, CheckCircle, AlertTriangle, ExternalLink } from 'lucide-react';
 
-const { shell } = window.require('electron');
-
-const PrinterWindow = ({
-    socket,
-    position,
-    onClose,
-    activeDragElement,
-    setActiveDragElement,
-    onMouseDown,
-    zIndex = 40
-}) => {
+const PrinterWindow = ({ socket, position, onClose, activeDragElement, onMouseDown, zIndex = 40 }) => {
     const [isDiscovering, setIsDiscovering] = useState(false);
     const [printers, setPrinters] = useState([]); // [{ name, host, port, printer_type, status: {...}, camera_url: ... }]
     const [selectedPrinter, setSelectedPrinter] = useState(null);

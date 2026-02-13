@@ -26,8 +26,7 @@ const ChatModule = ({
         <div
             id="chat"
             onMouseDown={onMouseDown}
-            className={`absolute px-6 py-4 pointer-events-auto transition-all duration-200 
-            backdrop-blur-xl bg-black/40 border border-white/10 shadow-2xl rounded-2xl
+            className={`absolute px-6 py-4 pointer-events-auto transition-all duration-200 friday-panel rounded-2xl
             ${isModularMode ? (activeDragElement === 'chat' ? 'ring-2 ring-green-500' : 'ring-1 ring-yellow-500/30') : ''}
         `}
             style={{
@@ -44,10 +43,13 @@ const ChatModule = ({
                 className="flex flex-col gap-3 overflow-y-auto mb-4 scrollbar-hide mask-image-gradient relative z-10"
                 style={{ height: height ? `calc(${height}px - 70px)` : '15rem' }}
             >
-                {messages.slice(-5).map((msg, i) => (
-                    <div key={i} className="text-sm border-l-2 border-cyan-800/50 pl-3 py-1">
-                        <span className="text-cyan-600 font-mono text-xs opacity-70">[{msg.time}]</span> <span className="font-bold text-cyan-300 drop-shadow-sm">{msg.sender}</span>
-                        <div className="text-gray-300 mt-1 leading-relaxed">{msg.text}</div>
+                {messages.slice(-10).map((msg, i) => (
+                    <div key={i} className="text-sm border-l-2" style={{borderColor: 'rgba(255,138,26,0.18)'}}>
+                        <div className="flex items-center gap-2 pl-3 py-1">
+                            <span className="text-[11px] font-mono opacity-60">[{msg.time}]</span>
+                            <span className="font-bold neon-accent">{msg.sender}</span>
+                        </div>
+                        <div className="text-gray-300 mt-1 leading-relaxed pl-3 pr-2">{msg.text}</div>
                     </div>
                 ))}
                 <div ref={messagesEndRef} />
@@ -60,7 +62,7 @@ const ChatModule = ({
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleSend}
                     placeholder="INITIALIZE COMMAND..."
-                    className="flex-1 bg-black/40 border border-cyan-700/30 rounded-lg p-3 text-cyan-50 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400/50 transition-all placeholder-cyan-800/50 backdrop-blur-sm"
+                    className="flex-1 btn-option rounded-lg p-3 text-sm backdrop-blur-sm"
                 />
             </div>
             {isModularMode && <div className={`absolute -top-6 left-0 text-xs font-bold tracking-widest ${activeDragElement === 'chat' ? 'text-green-500' : 'text-yellow-500/50'}`}>CHAT MODULE</div>}

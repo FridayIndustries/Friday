@@ -44,10 +44,10 @@ const Visualizer = ({ audioData, isListening, intensity = 0, width = 600, height
 
             ctx.clearRect(0, 0, w, h);
 
-            // Base Circle (Glow)
+                // Base Circle (Glow)
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius - 10, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(6, 182, 212, 0.1)';
+                ctx.strokeStyle = 'rgba(255, 138, 0, 0.12)';
             ctx.lineWidth = 2;
             ctx.stroke();
 
@@ -58,20 +58,20 @@ const Visualizer = ({ audioData, isListening, intensity = 0, width = 600, height
 
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius + breath, 0, Math.PI * 2);
-                ctx.strokeStyle = 'rgba(34, 211, 238, 0.5)';
+                ctx.strokeStyle = 'rgba(255, 138, 0, 0.5)';
                 ctx.lineWidth = 4;
                 ctx.shadowBlur = 20;
-                ctx.shadowColor = '#22d3ee';
+                ctx.shadowColor = '#FF8A00';
                 ctx.stroke();
                 ctx.shadowBlur = 0;
             } else {
                 // Active State: Just the Circle causing the pulse
                 ctx.beginPath();
                 ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-                ctx.strokeStyle = 'rgba(34, 211, 238, 0.8)';
+                ctx.strokeStyle = 'rgba(255, 138, 0, 0.85)';
                 ctx.lineWidth = 4;
                 ctx.shadowBlur = 20;
-                ctx.shadowColor = '#22d3ee';
+                ctx.shadowColor = '#FF8A00';
                 ctx.stroke();
                 ctx.shadowBlur = 0;
             }
@@ -88,12 +88,18 @@ const Visualizer = ({ audioData, isListening, intensity = 0, width = 600, height
             {/* Central Logo/Text */}
             <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
                 <motion.div
-                    animate={{ scale: isListening ? [1, 1.1, 1] : 1 }}
+                    animate={{ scale: isListening ? [1, 1.06, 1] : 1 }}
                     transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    className="text-cyan-100 font-bold tracking-widest drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]"
-                    style={{ fontSize: Math.min(width, height) * 0.1 }}
+                    className="neon-accent font-bold tracking-widest drop-shadow-[0_0_18px_rgba(255,138,0,0.95)]"
+                    style={{
+                        // Make font size relative so it reliably fits inside the drawn circle
+                        fontSize: Math.min(width, height) * 0.07,
+                        lineHeight: 1,
+                        whiteSpace: 'nowrap',
+                        textAlign: 'center'
+                    }}
                 >
-                    A.D.A
+                    F.R.I.D.A.Y
                 </motion.div>
             </div>
 

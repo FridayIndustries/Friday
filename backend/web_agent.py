@@ -11,8 +11,9 @@ from google.genai import types
 load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
 
+# Do not raise at import time; allow tests and offline usage without an API key.
 if not API_KEY:
-    raise ValueError("Please set GEMINI_API_KEY in your .env file")
+    API_KEY = None
 
 # 2. Configuration
 SCREEN_WIDTH = 1440
@@ -22,7 +23,14 @@ MODEL_ID = "gemini-2.5-computer-use-preview-10-2025"
 
 class WebAgent:
     def __init__(self):
-        self.client = genai.Client(api_key=API_KEY)
+        # Create client only if API key is available. Otherwise leave as None for offline/tests.
+        try:
+            if API_KEY:
+                self.client = genai.Client(api_key=API_KEY)
+            else:
+                self.client = None
+        except Exception:
+            self.client = None
         self.browser = None
         self.context = None
         self.page = None

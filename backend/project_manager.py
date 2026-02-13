@@ -8,7 +8,7 @@ class ProjectManager:
     def __init__(self, workspace_root: str):
         self.workspace_root = Path(workspace_root)
         self.projects_dir = self.workspace_root / "projects"
-        self.current_project = "temp"
+        self.current_project = "Main"
         
         # Ensure projects root exists
         if not self.projects_dir.exists():

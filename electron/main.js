@@ -2,14 +2,23 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 
-// Use ANGLE D3D11 backend - more stable on Windows while keeping WebGL working
-// This fixes "GPU state invalid after WaitForGetOffsetInRange" error
+// Configuration du moteur de rendu - Améliore la stabilité sur Windows
 app.commandLine.appendSwitch('use-angle', 'd3d11');
 app.commandLine.appendSwitch('enable-features', 'Vulkan');
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 
+// Configuration de l'identifiant unique pour le regroupement dans la barre des tâches
+try {
+    if (process.platform === 'win32') {
+        app.setAppUserModelId('com.friday.app');
+    }
+} catch (e) {
+    console.error('Erreur lors de la configuration de AppUserModelId:', e?.message);
+}
+
 let mainWindow;
 let pythonProcess;
+let windowWasShown = false;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
@@ -17,15 +26,16 @@ function createWindow() {
         height: 1080,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false, // For simple IPC/Socket.IO usage
+            contextIsolation: false, // Adapté pour l'usage IPC/Socket.IO simplifié
         },
+        // Utilisation de l'icône dans electron/assets
+        icon: path.join(__dirname, 'assets', 'icon.png'),
         backgroundColor: '#000000',
-        frame: false, // Frameless for custom UI
+        frame: false, // Fenêtre sans bordure pour interface personnalisée
         titleBarStyle: 'hidden',
-        show: false, // Don't show until ready
+        show: false, // Affichage après chargement complet
     });
 
-    // In dev, load Vite server. In prod, load index.html
     const isDev = process.env.NODE_ENV !== 'production';
 
     const loadFrontend = (retries = 3) => {
@@ -36,22 +46,22 @@ function createWindow() {
 
         loadPromise
             .then(() => {
-                console.log('Frontend loaded successfully!');
+                console.log('Frontend chargé avec succès !');
                 windowWasShown = true;
                 mainWindow.show();
                 if (isDev) {
-                    mainWindow.webContents.openDevTools();
+                    mainWindow.webContents.closeDevTools();
                 }
             })
             .catch((err) => {
-                console.error(`Failed to load frontend: ${err.message}`);
+                console.error(`Échec du chargement du frontend: ${err.message}`);
                 if (retries > 0) {
-                    console.log(`Retrying in 1 second... (${retries} retries left)`);
+                    console.log(`Nouvelle tentative dans 1 seconde... (${retries} restantes)`);
                     setTimeout(() => loadFrontend(retries - 1), 1000);
                 } else {
-                    console.error('Failed to load frontend after all retries. Keeping window open.');
+                    console.error('Échec définitif du chargement. Maintien de la fenêtre ouverte.');
                     windowWasShown = true;
-                    mainWindow.show(); // Show anyway so user sees something
+                    mainWindow.show();
                 }
             });
     };
@@ -65,9 +75,9 @@ function createWindow() {
 
 function startPythonBackend() {
     const scriptPath = path.join(__dirname, '../backend/server.py');
-    console.log(`Starting Python backend: ${scriptPath}`);
+    console.log(`Démarrage du backend Python: ${scriptPath}`);
 
-    // Assuming 'python' is in PATH. In prod, this would be the executable.
+    // Exécute le script Python présent dans le dossier backend
     pythonProcess = spawn('python', [scriptPath], {
         cwd: path.join(__dirname, '../backend'),
     });
@@ -77,22 +87,21 @@ function startPythonBackend() {
     });
 
     pythonProcess.stderr.on('data', (data) => {
-        console.error(`[Python Error]: ${data}`);
+        console.error(`[Erreur Python]: ${data}`);
     });
 }
 
+// --- Initialisation de l'application ---
+
 app.whenReady().then(() => {
+    // Événements IPC pour le contrôle de la fenêtre (Minimize/Maximize/Close)
     ipcMain.on('window-minimize', () => {
         if (mainWindow) mainWindow.minimize();
     });
 
     ipcMain.on('window-maximize', () => {
         if (mainWindow) {
-            if (mainWindow.isMaximized()) {
-                mainWindow.unmaximize();
-            } else {
-                mainWindow.maximize();
-            }
+            mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
         }
     });
 
@@ -100,13 +109,13 @@ app.whenReady().then(() => {
         if (mainWindow) mainWindow.close();
     });
 
+    // Gestion de la connexion au backend
     checkBackendPort(8000).then((isTaken) => {
         if (isTaken) {
-            console.log('Port 8000 is taken. Assuming backend is already running manually.');
+            console.log('Port 8000 occupé. Le backend est probablement déjà actif.');
             waitForBackend().then(createWindow);
         } else {
             startPythonBackend();
-            // Give it a moment to start, then wait for health check
             setTimeout(() => {
                 waitForBackend().then(createWindow);
             }, 1000);
@@ -118,16 +127,14 @@ app.whenReady().then(() => {
     });
 });
 
+// --- Utilitaires de vérification ---
+
 function checkBackendPort(port) {
     return new Promise((resolve) => {
         const net = require('net');
         const server = net.createServer();
         server.once('error', (err) => {
-            if (err.code === 'EADDRINUSE') {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
+            resolve(err.code === 'EADDRINUSE');
         });
         server.once('listening', () => {
             server.close();
@@ -143,14 +150,14 @@ function waitForBackend() {
             const http = require('http');
             http.get('http://127.0.0.1:8000/status', (res) => {
                 if (res.statusCode === 200) {
-                    console.log('Backend is ready!');
+                    console.log('Le backend est prêt !');
                     resolve();
                 } else {
-                    console.log('Backend not ready, retrying...');
+                    console.log('Backend non prêt, nouvelle tentative...');
                     setTimeout(check, 1000);
                 }
-            }).on('error', (err) => {
-                console.log('Waiting for backend...');
+            }).on('error', () => {
+                console.log('Attente du backend...');
                 setTimeout(check, 1000);
             });
         };
@@ -158,31 +165,26 @@ function waitForBackend() {
     });
 }
 
-let windowWasShown = false;
-
 app.on('window-all-closed', () => {
-    // Only quit if the window was actually shown at least once
-    // This prevents quitting during startup if window creation fails
+    // On ne quitte que si la fenêtre a été affichée au moins une fois
     if (process.platform !== 'darwin' && windowWasShown) {
         app.quit();
     } else if (!windowWasShown) {
-        console.log('Window was never shown - keeping app alive to allow retries');
+        console.log('La fenêtre n\'a jamais été affichée - maintien de l\'app pour tentatives');
     }
 });
 
 app.on('will-quit', () => {
-    console.log('App closing... Killing Python backend.');
+    console.log('Fermeture de l\'application... Arrêt du backend.');
     if (pythonProcess) {
         if (process.platform === 'win32') {
-            // Windows: Force kill the process tree synchronously
             try {
                 const { execSync } = require('child_process');
                 execSync(`taskkill /pid ${pythonProcess.pid} /f /t`);
             } catch (e) {
-                console.error('Failed to kill python process:', e.message);
+                console.error('Échec de l\'arrêt du processus Python:', e.message);
             }
         } else {
-            // Unix: SIGKILL
             pythonProcess.kill('SIGKILL');
         }
         pythonProcess = null;

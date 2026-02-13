@@ -22,13 +22,27 @@ const BrowserWindow = ({ imageSrc, logs, onClose, socket }) => {
         setInput('');
     };
 
+    const getDataUri = (b64) => {
+        if (!b64) return null;
+        // PNG base64 often starts with "iVB" (iVBORw0...), JPEG often starts with "/9j/"
+        if (b64.startsWith('iVB') || b64.startsWith('iVBOR')) return `data:image/png;base64,${b64}`;
+        if (b64.startsWith('/9j/')) return `data:image/jpeg;base64,${b64}`;
+        // Fallback to png
+        return `data:image/png;base64,${b64}`;
+    };
+
+    const imgSrc = getDataUri(imageSrc);
+
     return (
         <div className="w-full h-full relative group bg-[#111] rounded-lg overflow-hidden flex flex-col border border-gray-800">
             {/* Header Bar - Drag Handle */}
-            <div data-drag-handle className="h-8 bg-[#222] border-b border-gray-700 flex items-center justify-between px-2 shrink-0 cursor-grab active:cursor-grabbing">
-                <div className="flex items-center gap-2 text-gray-300 text-xs font-mono">
-                    <Globe size={14} className="text-cyan-500" />
-                    <span>WEB_AGENT_VIEW</span>
+            <div data-drag-handle className="h-8 friday-panel flex items-center justify-between px-3 shrink-0 cursor-grab active:cursor-grabbing">
+                <div className="flex items-center gap-3 text-xs font-mono">
+                    <Globe size={14} className="neon-accent" />
+                    <div className="flex flex-col leading-none">
+                        <span className="text-xs neon-accent">F.R.I.D.A.Y — Web</span>
+                        <span className="text-[10px] text-gray-400">Browser Stream</span>
+                    </div>
                 </div>
                 <button onClick={onClose} className="hover:bg-red-500/20 text-gray-400 hover:text-red-400 p-1 rounded transition-colors">
                     <X size={14} />
@@ -37,9 +51,9 @@ const BrowserWindow = ({ imageSrc, logs, onClose, socket }) => {
 
             {/* Browser Content */}
             <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden">
-                {imageSrc ? (
+                {imgSrc ? (
                     <img
-                        src={`data:image/jpeg;base64,${imageSrc}`}
+                        src={imgSrc}
                         alt="Browser View"
                         className="max-w-full max-h-full object-contain"
                     />

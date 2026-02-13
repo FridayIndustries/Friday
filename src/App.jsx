@@ -1369,7 +1369,7 @@ function App() {
             {/* Hand Cursor - Only show if tracking is enabled */}
             {isVideoOn && isHandTrackingEnabled && (
                 <div
-                    className={`fixed w-6 h-6 border-2 rounded-full pointer-events-none z-[100] transition-transform duration-75 ${isPinching ? 'bg-cyan-400 border-cyan-400 scale-75 shadow-[0_0_15px_rgba(34,211,238,0.8)]' : 'border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.3)]'}`}
+                    className={`fixed w-6 h-6 border-2 rounded-full pointer-events-none z-[100] transition-transform duration-75 ${isPinching ? 'bg-cyan-400 border-cyan-400 scale-75 shadow-[0_0_15px_rgba(255,138,0,0.85)]' : 'border-cyan-400 shadow-[0_0_10px_rgba(255,138,0,0.45)]'}`}
                     style={{
                         left: cursorPos.x,
                         top: cursorPos.y,
@@ -1396,11 +1396,11 @@ function App() {
             {/* Top Bar (Draggable) */}
             <div className="z-50 flex items-center justify-between p-2 border-b border-cyan-500/20 bg-black/40 backdrop-blur-md select-none sticky top-0" style={{ WebkitAppRegion: 'drag' }}>
                 <div className="flex items-center gap-4 pl-2">
-                    <h1 className="text-xl font-bold tracking-[0.2em] text-cyan-400 drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
-                        A.D.A
+                    <h1 className="text-xl font-bold tracking-[0.2em] text-cyan-400 drop-shadow-[0_0_10px_rgba(255,138,0,0.55)]">
+                        F.R.I.D.A.Y
                     </h1>
                     <div className="text-[10px] text-cyan-700 border border-cyan-900 px-1 rounded">
-                        V2.0.0
+                         Private Beta
                     </div>
                     {/* FPS Counter */}
                     {isVideoOn && (
@@ -1494,7 +1494,7 @@ function App() {
                 >
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none mix-blend-overlay"></div>
                     {/* Compact Display Container (1080p Source) */}
-                    <div className="relative border border-cyan-500/30 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(6,182,212,0.1)] w-80 aspect-video bg-black/80">
+                    <div className="relative border border-cyan-500/30 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(255,138,0,0.12)] w-80 aspect-video bg-black/80">
                         {/* Hidden Video Element (Source) */}
                         <video ref={videoRef} autoPlay muted className="absolute inset-0 w-full h-full object-cover opacity-0" />
 
@@ -1622,6 +1622,8 @@ function App() {
                     height={elementSizes.chat.h}
                     onMouseDown={(e) => handleMouseDown(e, 'chat')}
                 />
+
+                <div className="footer-credit">By Rayan M.</div>
 
                 {/* Footer Controls / Tools Module */}
                 <div className="z-20 flex justify-center pb-10 pointer-events-none">
