@@ -8,14 +8,23 @@ Friday  is a sophisticated AI assistant designed for multimodal interaction. It 
 🌟 Capabilities at a Glance
 Feature	Description	Technology
 🗣️ Low-Latency Voice	Real-time conversation with interrupt handling	Gemini 2.5 Native Audio
+
 🧊 Parametric CAD	Editable 3D model generation from voice prompts	build123d → STL
+
 🖨️ 3D Printing	Slicing and wireless print job submission	OrcaSlicer + Moonraker/OctoPrint
+
 🖐️ Minority Report UI	Gesture-controlled window manipulation	MediaPipe Hand Tracking
+
 👁️ Face Authentication	Secure local biometric login	MediaPipe Face Landmarker
+
 🌐 Web Agent	Autonomous browser automation	Playwright + Chromium
+
 🏠 Smart Home	Voice control for TP-Link Kasa devices	python-kasa
+
 📁 Project Memory	Persistent context across sessions	File-based JSON storage
+
 🖐️ Gesture Control Details
+
 Friday's "Minority Report" interface uses your webcam to detect hand gestures:
 
 Gesture	Action
