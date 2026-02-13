@@ -6,7 +6,9 @@ A.D.A = Advanced Design Assistant
 Friday  is a sophisticated AI assistant designed for multimodal interaction. It combines Google's Gemini 2.5 Native Audio with computer vision, gesture control, and 3D CAD generation in a Electron desktop application.
 
 🌟 Capabilities at a Glance
+
 Feature	Description	Technology
+
 🗣️ Low-Latency Voice	Real-time conversation with interrupt handling	Gemini 2.5 Native Audio
 
 🧊 Parametric CAD	Editable 3D model generation from voice prompts	build123d → STL
