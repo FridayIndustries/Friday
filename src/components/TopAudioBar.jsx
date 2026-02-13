@@ -55,7 +55,7 @@ const TopAudioBar = ({ audioData }) => {
                     className="opacity-90"
                 />
             </div>
-            <div className="text-xs text-orange-200 opacity-90">By Rayan M.</div>
+            <div className="text-xs text-orange-200 opacity-90">By Friday Industries.</div>
         </div>
     );
 };

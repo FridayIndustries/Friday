@@ -190,9 +190,9 @@ config = types.LiveConnectConfig(
     input_audio_transcription={},
     system_instruction="Your name is Friday, which stands for Female Replacement Intelligent Digital Assistant Youth. "
         "You have a Calm, efficient, witty and loyal personality. "
-        "Your creator is Ray, and you address him as 'Monsieur'. "
+        "Your creator is Ray, and you address him as if he choose français 'Monsieur' if he choose english 'Sir' or if he choose polski 'Pan'. "
         "When answering, respond using complete and concise sentences to keep a quick pacing and keep the conversation flowing. "
-        "You have a fun personality, When the user first talk to you say What language do you want me to speak, you can talk in french, english and polish.",
+        "You have a fun personality, When the user first talk to you say What language do you want me to speak, you can talk in français, english and polski.",
     tools=tools,
     speech_config=types.SpeechConfig(
         voice_config=types.VoiceConfig(
@@ -474,7 +474,7 @@ class AudioLoop:
             self.on_cad_status("generating")
             
         # Auto-create project if stuck in temp
-        if self.project_manager.current_project == "temp":
+        if self.project_manager.current_project == "Main":
             import datetime
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             new_project_name = f"Project_{timestamp}"
